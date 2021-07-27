@@ -37,29 +37,29 @@ byte[] DecryptStkh(byte[] cipherData)
         cryptoStream.CopyTo(outmemoryStream);
         decryptedData = outmemoryStream.ToArray();
     }
-				
+
 	// correct string length usins crc32 low byte
     var len = decryptedData.Length / 16;
     var lenFix = crc32 & 0xf;
     if (lenFix != 0)
-	{
-    	len = 16 * (len - 1) + lenFix;
-		var decryptedDataLength = len;
-    	decryptedDataLength = decryptedData[len - 1] == 0 ? len - 1 : decryptedDataLength;
-    	decryptedData = decryptedData.Take(decryptedDataLength).ToArray();
-	}
+    {
+        len = 16 * (len - 1) + lenFix;
+        var decryptedDataLength = len;
+        decryptedDataLength = decryptedData[len - 1] == 0 ? len - 1 : decryptedDataLength;
+        decryptedData = decryptedData.Take(decryptedDataLength).ToArray();
+    }
 
-	return decryptedData;
+    return decryptedData;
 }
 
 string DecryptTLogEnc(byte[] cipherData)
 {
-	var decryptedData = DecryptStkh(cipherData);
-	var dataLength = decryptedData.Length;
-	if (decryptedData.Length > 2 && decryptedData[dataLength - 1] == 0)
-		dataLength -= 1;
+    var decryptedData = DecryptStkh(cipherData);
+    var dataLength = decryptedData.Length;
+    if (decryptedData.Length > 2 && decryptedData[dataLength - 1] == 0)
+        dataLength -= 1;
 
-	return Encoding.UTF8.GetString(decryptedData, 0, dataLength);
+    return Encoding.UTF8.GetString(decryptedData, 0, dataLength);
 }
 
 string DecryptTHWCEnc(byte[] cipherData)
