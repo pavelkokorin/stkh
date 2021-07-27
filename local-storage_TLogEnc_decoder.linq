@@ -38,7 +38,7 @@ byte[] DecryptStkh(byte[] cipherData)
         decryptedData = outmemoryStream.ToArray();
     }
 
-	// correct string length usins crc32 low byte
+    // correct string length usins crc32 low byte
     var len = decryptedData.Length / 16;
     var lenFix = crc32 & 0xf;
     if (lenFix != 0)
@@ -74,28 +74,30 @@ string DecryptTHWCEnc(byte[] cipherData)
 
 void ReadAllTLogEncs()
 {
-	var queryLog = from t in TLogEncs
-				select new
-				{
-					Ev_time = DateTime.FromOADate((double)t.Ev_time),
-					Ev_source = DecryptTLogEnc(t.Ev_source),
-					Ev_desc= DecryptTLogEnc(t.Ev_desc)
-				};
-	queryLog.Dump();
+    var queryLog = 
+        from t in TLogEncs
+        select new
+        {
+            Ev_time = DateTime.FromOADate((double)t.Ev_time),
+            Ev_source = DecryptTLogEnc(t.Ev_source),
+            Ev_desc= DecryptTLogEnc(t.Ev_desc)
+        };
+    queryLog.Dump();
 }
 
 void ReadAllTHWCEncs()
 {
-	var queryHw = from hw in THWCEncs
-			select new
-			{
-				Hwc_str = DecryptTHWCEnc(hw.Hwc_str)
-			};
-	queryHw.Dump();
+    var queryHw =
+        from hw in THWCEncs
+        select new
+        {
+            Hwc_str = DecryptTHWCEnc(hw.Hwc_str)
+        };
+    queryHw.Dump();
 }
 
 void Main()
 {
-	ReadAllTLogEncs();
-	ReadAllTHWCEncs();
+    ReadAllTLogEncs();
+    ReadAllTHWCEncs();
 }
