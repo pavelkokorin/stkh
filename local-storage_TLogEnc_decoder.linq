@@ -64,12 +64,12 @@ string DecryptTLogEnc(byte[] cipherData)
 
 string DecryptTHWCEnc(byte[] cipherData)
 {
-	var decryptedData = DecryptStkh(cipherData);
-	var dataLength = decryptedData.Length;
-	if (dataLength > 2 && decryptedData[dataLength - 1] == 0 && decryptedData[dataLength - 2] == 0)
-		dataLength -= 2;
+    var decryptedData = DecryptStkh(cipherData);
+    var dataLength = decryptedData.Length;
+    if (dataLength > 2 && decryptedData[dataLength - 1] == 0 && decryptedData[dataLength - 2] == 0)
+        dataLength -= 2;
 
-	return Encoding.Unicode.GetString(decryptedData, 0, dataLength).Replace((char)0xffff, ' ');
+    return Encoding.Unicode.GetString(decryptedData, 0, dataLength).Replace((char)0xffff, ' ');
 }
 
 void ReadAllTLogEncs()
