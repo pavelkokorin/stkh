@@ -22,21 +22,21 @@
 
 byte[] DecryptStkh(byte[] cipherData)
 {
-	byte[] keyData = {  0xeb, 0xf2, 0xf9, 0x00, 0x07, 0x0e, 0x15, 0x1c, 0x23, 0x2a, 0x31, 0x38, 0x3f, 0x46, 0x4d, 0x54,
-						0x5b, 0x62, 0x69, 0x70, 0x77, 0x7e, 0x85, 0x8c, 0x93, 0x9a, 0xa1, 0xa8, 0xaf, 0xb6, 0xbd, 0xc4 };
+    byte[] keyData = { 0xeb, 0xf2, 0xf9, 0x00, 0x07, 0x0e, 0x15, 0x1c, 0x23, 0x2a, 0x31, 0x38, 0x3f, 0x46, 0x4d, 0x54,
+                       0x5b, 0x62, 0x69, 0x70, 0x77, 0x7e, 0x85, 0x8c, 0x93, 0x9a, 0xa1, 0xa8, 0xaf, 0xb6, 0xbd, 0xc4 };
 
-	int crc32 = BitConverter.ToInt32(cipherData, 0);            
-    cipherData = cipherData.Skip(4).ToArray();			
-	var decryptedData = default(byte[]);
-			
-	using (var rijndaelManaged = new RijndaelManaged { Key = keyData, Mode = CipherMode.ECB, Padding = PaddingMode.None })
-	using (var memoryStream = new MemoryStream(cipherData))
-	using (var cryptoStream = new CryptoStream(memoryStream, rijndaelManaged.CreateDecryptor(), CryptoStreamMode.Read))
-	using (var outmemoryStream = new MemoryStream())
-	{
-		cryptoStream.CopyTo(outmemoryStream);
-		decryptedData = outmemoryStream.ToArray();
-	}
+    int crc32 = BitConverter.ToInt32(cipherData, 0);
+    cipherData = cipherData.Skip(4).ToArray();
+    var decryptedData = default(byte[]);
+		
+    using (var rijndaelManaged = new RijndaelManaged { Key = keyData, Mode = CipherMode.ECB, Padding = PaddingMode.None })
+    using (var memoryStream = new MemoryStream(cipherData))
+    using (var cryptoStream = new CryptoStream(memoryStream, rijndaelManaged.CreateDecryptor(), CryptoStreamMode.Read))
+    using (var outmemoryStream = new MemoryStream())
+    {
+        cryptoStream.CopyTo(outmemoryStream);
+        decryptedData = outmemoryStream.ToArray();
+    }
 				
 	// correct string length usins crc32 low byte
     var len = decryptedData.Length / 16;
@@ -97,5 +97,5 @@ void ReadAllTHWCEncs()
 void Main()
 {
 	ReadAllTLogEncs();
-	//ReadAllTHWCEncs();
+	ReadAllTHWCEncs();
 }
